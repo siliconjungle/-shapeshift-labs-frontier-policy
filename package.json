@@ -1,0 +1,67 @@
+{
+  "name": "@shapeshift-labs/frontier-policy",
+  "version": "0.1.0",
+  "description": "Serializable policy and capability decisions for Frontier apps, effects, views, sync, routes, traces, and AI tools.",
+  "type": "module",
+  "license": "MIT",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/siliconjungle/-shapeshift-labs-frontier-policy.git"
+  },
+  "homepage": "https://github.com/siliconjungle/-shapeshift-labs-frontier-policy#readme",
+  "bugs": {
+    "url": "https://github.com/siliconjungle/-shapeshift-labs-frontier-policy/issues"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "benchmarks/package-bench.mjs",
+    "benchmarks/competitor-bench.mjs"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "npm run build && npm run typecheck && node test/smoke.mjs && node test/fuzz.mjs --cases 700",
+    "prepack": "npm run readme:packages:check && npm run test",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p test/tsconfig.json --noEmit",
+    "fuzz": "npm run build && node test/fuzz.mjs",
+    "bench": "npm run build && node --expose-gc benchmarks/package-bench.mjs --out benchmarks/results/frontier-policy-package-bench-latest.json",
+    "bench:competitors": "npm run build && node --expose-gc benchmarks/competitor-bench.mjs --out benchmarks/results/frontier-policy-competitors-latest.json",
+    "pack:dry": "npm pack --dry-run",
+    "readme:packages": "node benchmarks/package-readme-sections.mjs",
+    "readme:packages:check": "node benchmarks/package-readme-sections.mjs --check"
+  },
+  "keywords": [
+    "frontier",
+    "policy",
+    "authorization",
+    "capabilities",
+    "redaction",
+    "sync",
+    "agent",
+    "permissions"
+  ],
+  "dependencies": {
+    "@shapeshift-labs/frontier": "0.1.9"
+  },
+  "devDependencies": {
+    "@casl/ability": "^7.0.0",
+    "accesscontrol": "^2.2.1",
+    "casbin": "^5.50.0",
+    "typescript": "^6.0.3"
+  }
+}

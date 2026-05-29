@@ -1,0 +1,24 @@
+name: package-ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: npm ci
+      - run: npm run readme:packages:check
+      - run: npm test
+      - run: npm run fuzz
+      - run: npm run bench -- --rounds 3
+      - run: npm run bench:competitors -- --rounds 3
+      - run: npm run pack:dry
